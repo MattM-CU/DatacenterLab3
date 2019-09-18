@@ -14,42 +14,49 @@ for line in sys.stdin:
 
 	line = line.strip()
 
-	line = line.split('\t')
+	try:
 
-	patent_id = line[0]
+		line = line.split('\t')
 
-	if patent_id != last_patent_id:
-		if cited_state is not None:
-			for citation in citations:
-				# citing id    citing state    cited id    cited state
-				print "{}\t{}\t{}\t{}".format(citation[0], citation[1], citation[2], cited_state)
+		patent_id = line[0]
 
-		last_patent_id = patent_id
+		if patent_id != last_patent_id:
+			if cited_state is not None:
+				for citation in citations:
+					# citing id    citing state    cited id    cited state
+					print "{}\t{}\t{}\t{}".format(citation[0], citation[1], citation[2], cited_state)
 
-		cited_state = None
-		citations = list()
+			last_patent_id = patent_id
 
-	# it's patent id   S-State
-	if line[1].startswith('S'):
+			cited_state = None
+			citations = list()
 
-		cited_state = line[1].split('-')[1]
+		# it's patent id   S-State
+		if line[1].startswith('S'):
 
-	# it's cited id    C-citing id,citing state
-	elif line[1].startswith('C'):
+			cited_state = line[1].split('-')[1]
 
-		cited_id = line[0]
+		# it's cited id    C-citing id,citing state
+		elif line[1].startswith('C'):
 
-		citing_id_state = line[1].split('-')[1].split(',')
+			cited_id = line[0]
 
-		citing_id = citing_id_state[0]
-		citing_state = citing_id_state[1]
+			citing_id_state = line[1].split('-')[1].split(',')
 
-		citations.append((citing_id, citing_state, cited_id))
+			citing_id = citing_id_state[0]
+			citing_state = citing_id_state[1]
 
-	# it's patent id    info
-	else:
-		# patent id    info
-		print "{}\t{}".format(line[0], line[1])
+			citations.append((citing_id, citing_state, cited_id))
+
+		# it's patent id    info
+		else:
+			# patent id    info
+			print "{}\t{}".format(line[0], line[1])
+
+	except Exception as error:
+		# print line
+		# print error
+		continue
 
 if cited_state is not None:
 	for citation in citations:

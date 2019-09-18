@@ -19,6 +19,6 @@ for line in sys.stdin:
 			print "{}\t{}".format(line[0], 1)
 
 	# it's patent id    info
-	else:
+	elif len(line) == 2:
 		# patent id    info
 		print "{}\t{}".format(line[0], line[1])

@@ -4,4 +4,8 @@ import sys
 # this is basically cat
 for line in sys.stdin:
 
-	print line
+	line = line.strip()
+
+	if line:
+
+		print line
