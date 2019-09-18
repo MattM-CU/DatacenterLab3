@@ -1,0 +1,30 @@
+prepare:
+	-hdfs dfs -mkdir pats_and_cites
+	hdfs dfs -put /home/matt_menten/pat_cite_data/apat63_99.txt pats_and_cites/pats
+	hdfs dfs -put /home/matt_menten/pat_cite_data/cite75_99.txt pats_and_cites/cites
+
+filesystem:
+	-hdfs dfs -mkdir /user
+	-hdfs dfs -mkdir /user/$(USER)
+
+
+stream1:
+	hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
+	-mapper Mapper1.py \
+	-reducer Reducer1.py \
+	-file Mapper1.py -file Reducer1.py \
+	-input pats_and_cites -output stage1_output
+
+stream2:
+	hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
+	-mapper Mapper2.py \
+	-reducer Reducer2.py \
+	-file Mapper2.py -file Reducer2.py \
+	-input stage1_output -output stage2_output
+
+stream3:
+	hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
+	-mapper Mapper3.py \
+	-reducer Reducer3.py \
+	-file Mapper3.py -file Reducer3.py \
+	-input stage2_output -output final_output
