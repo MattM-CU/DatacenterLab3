@@ -25,7 +25,7 @@ for line in sys.stdin:
 
 		cited_id = line[0]
 
-		citing_id_state = line[1].split['-'].split[',']
+		citing_id_state = line[1].split('-')[1].split(',')
 
 		citing_id = citing_id_state[0]
 		citing_state = citing_id_state[1]
