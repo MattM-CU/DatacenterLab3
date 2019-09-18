@@ -3,6 +3,7 @@ import sys
 
 citations = list()
 cited_state = None
+last_patent_id = None
 
 # cited id    C-citing id,citing state
 # or
@@ -14,6 +15,19 @@ for line in sys.stdin:
 	line = line.strip()
 
 	line = line.split('\t')
+
+	patent_id = line[0]
+
+	if patent_id != last_patent_id:
+		if cited_state is not None:
+			for citation in citations:
+				# citing id    citing state    cited id    cited state
+				print "{}\t{}\t{}\t{}".format(citation[0], citation[1], citation[2], cited_state)
+
+		last_patent_id = patent_id
+
+		cited_state = None
+		citations = list()
 
 	# it's patent id   S-State
 	if line[1].startswith('S'):
